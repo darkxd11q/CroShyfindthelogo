@@ -1,0 +1,392 @@
+/* ============================================================
+   Find the Hidden Logo - design tokens
+   Theme: a dim evidence room. You sweep a flashlight over a
+   photograph looking for a hidden mark. Case-file typography,
+   stamped labels, warm paper accents for read content (comments),
+   ink/charcoal stage for the photo itself.
+   ============================================================ */
+
+:root {
+  --ink: #12141c;
+  --ink-2: #1b1f2b;
+  --paper: #efe8d6;
+  --paper-line: #d8cdb0;
+  --line: #2c3142;
+  --text: #e9e8e2;
+  --text-dim: #9aa0b4;
+  --text-on-paper: #2a2620;
+  --gold: #e6b341;
+  --gold-dim: #8a6b27;
+  --teal: #3fae8b;
+  --rust: #c1502e;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --font-display: 'Archivo Black', 'Arial Black', sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, -apple-system, Segoe UI, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-image:
+    radial-gradient(circle at 15% 0%, #1a1f30 0%, transparent 45%),
+    radial-gradient(circle at 85% 10%, #1a1f30 0%, transparent 40%);
+  min-height: 100vh;
+}
+
+a { color: var(--gold); }
+
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 28px 20px 80px;
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 18px;
+}
+
+.site-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5vw, 40px);
+  letter-spacing: 0.5px;
+  margin: 0;
+  line-height: 1;
+}
+
+.site-title span { color: var(--gold); }
+
+.site-tag {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-top: 6px;
+}
+
+.admin-link {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  padding: 7px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.admin-link:hover { color: var(--gold); border-color: var(--gold-dim); }
+
+/* ---------- Photo / signature flashlight element ---------- */
+.case-card {
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+  position: relative;
+}
+
+.case-label {
+  position: absolute;
+  top: -11px;
+  left: 18px;
+  background: var(--gold);
+  color: #1a1304;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.photo-frame {
+  position: relative;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #000;
+  cursor: crosshair;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.photo-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.spotlight-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(8, 9, 14, 0.42);
+  transition: background 60ms linear;
+}
+
+.found-flash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--fx, 50%) var(--fy, 50%), rgba(230, 179, 65, 0.65) 0%, rgba(230, 179, 65, 0) 55%);
+  opacity: 0;
+}
+.found-flash.show {
+  opacity: 1;
+  animation: flashPulse 900ms ease-out forwards;
+}
+@keyframes flashPulse {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.miss-mark, .hit-mark {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  margin-left: -17px;
+  margin-top: -17px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+}
+.miss-mark {
+  border: 2px solid var(--rust);
+}
+.miss-mark.show {
+  opacity: 1;
+  animation: missPop 650ms ease-out forwards;
+}
+.hit-mark {
+  border: 2px solid var(--gold);
+}
+.hit-mark.show {
+  opacity: 1;
+  animation: hitPop 900ms ease-out forwards;
+}
+@keyframes missPop {
+  0% { transform: scale(0.4); opacity: 1; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+@keyframes hitPop {
+  0% { transform: scale(0.3); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+.result-stamp {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-8deg) scale(0.85);
+  font-family: var(--font-display);
+  font-size: clamp(26px, 6vw, 44px);
+  letter-spacing: 2px;
+  padding: 10px 22px;
+  border: 4px solid currentColor;
+  border-radius: 8px;
+  opacity: 0;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+.result-stamp.found {
+  color: var(--gold);
+  background: rgba(18, 20, 28, 0.55);
+}
+.result-stamp.show {
+  animation: stampIn 1300ms ease-out forwards;
+}
+@keyframes stampIn {
+  0% { opacity: 0; transform: translate(-50%, -50%) rotate(-8deg) scale(1.4); }
+  15% { opacity: 1; transform: translate(-50%, -50%) rotate(-8deg) scale(0.85); }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.empty-state {
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.case-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+/* ---------- Vote row ---------- */
+.vote-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.vote-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--ink-2);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 120ms ease, transform 80ms ease;
+}
+.vote-btn:hover { border-color: var(--text-dim); }
+.vote-btn:active { transform: scale(0.98); }
+
+.vote-btn .count {
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+.vote-btn.like.active { border-color: var(--teal); color: var(--teal); }
+.vote-btn.like.active .count { color: var(--teal); }
+.vote-btn.dislike.active { border-color: var(--rust); color: var(--rust); }
+.vote-btn.dislike.active .count { color: var(--rust); }
+
+/* ---------- Comments ---------- */
+.comments-section {
+  margin-top: 32px;
+}
+
+.section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+
+.comment-form {
+  background: var(--paper);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.comment-form input,
+.comment-form textarea {
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--paper-line);
+  background: #fffdf8;
+  color: var(--text-on-paper);
+  resize: vertical;
+}
+.comment-form input:focus,
+.comment-form textarea:focus {
+  outline: 2px solid var(--gold-dim);
+  outline-offset: 1px;
+}
+
+.comment-form textarea { min-height: 64px; }
+
+.comment-form .row { display: flex; justify-content: space-between; align-items: center; }
+
+.char-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #6b6450;
+}
+
+.btn-primary {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  background: var(--ink);
+  color: var(--gold);
+  border: none;
+  padding: 11px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.btn-primary:hover { background: #000; }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.form-msg {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  min-height: 16px;
+}
+.form-msg.error { color: var(--rust); }
+.form-msg.success { color: var(--teal); }
+
+.comment-list {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.comment-item {
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+
+.comment-item .who {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.comment-item .who time { color: var(--text-dim); }
+.comment-item p { margin: 0; font-size: 14px; line-height: 1.5; }
+
+.comment-empty {
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 10px 2px;
+}
+
+@media (max-width: 480px) {
+  .site-header { flex-direction: column; align-items: flex-start; }
+}
